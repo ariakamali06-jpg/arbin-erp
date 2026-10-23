@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>آربین | سامانه جامع مالی و حسابداری</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= 1. Top Enterprise Arbin Bar ================= -->
+  <div class="arbin-corp-bar">
+    <div class="arbin-brand">
+      <span class="logo-text">آربین</span>
+      <span class="logo-badge">نسخه سازمانی دسکتاپ</span>
+    </div>
+    <div class="arbin-meta">
+      <div class="arbin-meta-item">
+        <span>شرکت:</span>
+        <span class="val">فناوری مالی آربین پارس (سهامی خاص)</span>
+      </div>
+      <div class="arbin-meta-item">
+        <span>سال مالی:</span>
+        <span class="val" id="fyChip">۱۴۰۵</span>
+        <span class="arbin-tag-active">باز</span>
+      </div>
+      <div class="arbin-meta-item">
+        <span>امروز:</span>
+        <span class="val" id="arbinClock">۲۳ مهر ۱۴۰۵</span>
+      </div>
+      <div class="arbin-lock-badge">
+        🔒 قفل سخت‌افزاری دیجیتال: متصل
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 2. Arbin Quick Action Ribbon ================= -->
+  <div class="arbin-ribbon">
+    <button class="ribbon-btn primary" id="ribbonNewJe">
+      <span>📄 سند حسابداری جدید</span>
+      <span class="k-badge">F2</span>
+    </button>
+    <button class="ribbon-btn" id="ribbonSaveJe">
+      <span>💾 ذخیره سند</span>
+      <span class="k-badge">F4</span>
+    </button>
+    <div class="ribbon-sep"></div>
+    <button class="ribbon-btn" id="ribbonDrillDown">
+      <span>🔍 مرور حساب‌ها</span>
+      <span class="k-badge">F6</span>
+    </button>
+    <button class="ribbon-btn" id="ribbonTrialBalance">
+      <span>📊 تراز آزمایشی</span>
+    </button>
+    <button class="ribbon-btn" id="ribbonDocFlow">
+      <span>🔗 ارتباط اسناد</span>
+      <span class="k-badge">F8</span>
+    </button>
+    <div class="ribbon-sep"></div>
+    <button class="ribbon-btn" id="ribbonNewInvoice">
+      <span>🧾 فاکتور فروش جدید</span>
+    </button>
+    <button class="ribbon-btn" id="ribbonNewCheque">
+      <span>📥 دریافت چک صیادی</span>
+    </button>
+    <div class="ribbon-sep"></div>
+    <button class="ribbon-btn" id="btnRefresh">
+      <span>🔄 بازخوانی</span>
+      <span class="k-badge">F5</span>
+    </button>
+    <button class="ribbon-btn ghost" id="btnBootstrap">
+      <span>⚡ راه‌اندازی داده نمایشی</span>
+    </button>
+  </div>
+
+  <!-- ================= 3. MDI Tab Bar (پنجره‌های باز) ================= -->
+  <div class="mdi-tabstrip" id="tabStrip">
+    <div class="mdi-tab active" data-tab="dashboard">
+      <span>📊 داشبورد مدیریتی</span>
+    </div>
+  </div>
+
+  <div class="workspace-wrapper">
+    <!-- ================= Sidebar ================= -->
+    <aside class="sidebar">
+      <div class="sidebar-title">
+        <span>سیستم‌ها و زیرسیستم‌ها</span>
+        <span style="font-size:10px; color:#cbd5e1;">ARBIN ERP</span>
+      </div>
+      <nav id="nav">
+        <button data-view="dashboard" id="navDashboard" class="active">📊 داشبورد مدیریتی</button>
+        
+        <div class="nav-group-header">📂 سیستم حسابداری مالی</div>
+        <button data-view="ledger" id="navLedger">📝 سند حسابداری و دفاتر</button>
+        <button data-view="drilldown" id="navDrillDown">🔍 مرور جامع حساب‌ها</button>
+        <button data-view="docflow" id="navDocFlow">🔗 ارتباط و پیگیری اسناد</button>
+        
+        <div class="nav-group-header">📂 سیستم دریافت و پرداخت</div>
+        <button data-view="treasury" id="navTreasury">💰 خزانه‌داری، چک و بانک</button>
+        
+        <div class="nav-group-header">📂 سیستم تأمین و انبار</div>
+        <button data-view="inventory" id="navInventory">📦 انبار، کالا و کاردکس</button>
+        
+        <div class="nav-group-header">📂 سیستم مشتریان و فروش</div>
+        <button data-view="sales" id="navSales">🧾 فروش و صورتحساب مؤدیان</button>
+        
+        <div class="nav-group-header">📂 سیستم حقوق و دستمزد</div>
+        <button data-view="payroll" id="navPayroll">👥 حقوق، بیمه ۳۰٪ و مالیات</button>
+        
+        <div class="nav-group-header">📂 سیستم اموال و دارایی ثابت</div>
+        <button data-view="fixedAssets" id="navFixedAssets">🏷️ اموال و استهلاک ماده ۱۴۹</button>
+        
+        <div class="nav-group-header">📂 سیستم تولید و بهای تمام‌شده</div>
+        <button data-view="manufacturing" id="navManufacturing">🧪 فرمول ساخت BOM و تولید</button>
+        
+        <div class="nav-group-header">📂 سیستم پیمانکاری و پروژه‌ها</div>
+        <button data-view="contracting" id="navContracting">📜 پیمانکاری و صورت‌وضعیت</button>
+        
+        <div class="nav-group-header">⚙️ مدیریت و لایسنس</div>
+        <button data-view="modules" id="navModules">🧩 بسته‌های صنفی و ماژول‌ها</button>
+      </nav>
+      <div class="side-foot" id="sysInfo">در حال راه‌اندازی…</div>
+    </aside>
+
+    <!-- ================= Main ================= -->
+    <main class="main">
+      <div class="view-subbar">
+        <h1 id="viewTitle">داشبورد مدیریتی</h1>
+        <div class="subbar-actions">
+          <span class="badge ok">سامانه آماده کار</span>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+      <div class="content">
+
+      <!-- ============ 1. Dashboard ============ -->
+      <section class="view active" id="view-dashboard">
+        <div class="grid kpis" id="kpis"></div>
+
+        <!-- ============ Interactive Financial Workflow Map ============ -->
+        <div class="card workflow-map-card">
+          <div class="workflow-map-header">
+            <div class="workflow-map-title-wrap">
+              <div class="workflow-map-icon">🗺️</div>
+              <div>
+                <h3 class="workflow-map-main-title">نقشه فرآیندهای مالی و چرخه اسناد آربین</h3>
+                <div class="workflow-map-desc">راهنمای تصویری جریان عملیات: برای ورود مستقیم به هر فرم یا گزارش، روی مرحله مورد نظر کلیک کنید.</div>
+              </div>
+            </div>
+            <button class="btn sm ghost" id="btnDashToDocFlow">🔗 رهگیری کامل ارتباط اسناد (F8)</button>
+          </div>
+          <div class="workflow-steps-track">
+            <div class="workflow-step-node" data-flow-target="invoicing">
+              <div class="wf-step-num">۱</div>
+              <div class="wf-step-icon">🛒</div>
+              <div class="wf-step-title">فروش و مشتریان</div>
+              <div class="wf-step-sub">فاکتور، ارزش‌افزوده، ماده ۱۶۹</div>
+              <div class="wf-step-link">صدور فاکتور ⬅</div>
+            </div>
+            <div class="wf-step-connector">
+              <span class="wf-conn-line"></span>
+              <span class="wf-conn-arrow">◀</span>
+            </div>
+            <div class="workflow-step-node" data-flow-target="inventory">
+              <div class="wf-step-num">۲</div>
+              <div class="wf-step-icon">📦</div>
+              <div class="wf-step-title">انبار و کالا</div>
+              <div class="wf-step-sub">حواله خروج و رسید انبار</div>
+              <div class="wf-step-link">ورود به انبارداری ⬅</div>
+            </div>
+            <div class="wf-step-connector">
+              <span class="wf-conn-line"></span>
+              <span class="wf-conn-arrow">◀</span>
+            </div>
+            <div class="workflow-step-node active-highlight" data-flow-target="ledger">
+              <div class="wf-step-num">۳</div>
+              <div class="wf-step-icon">📝</div>
+              <div class="wf-step-title">سند حسابداری</div>
+              <div class="wf-step-sub">ثبت دوبل کیبوردی و دفاتر</div>
+              <div class="wf-step-link">صدور سند (F2) ⬅</div>
+            </div>
+            <div class="wf-step-connector">
+              <span class="wf-conn-line"></span>
+              <span class="wf-conn-arrow">◀</span>
+            </div>
+            <div class="workflow-step-node" data-flow-target="treasury">
+              <div class="wf-step-num">۴</div>
+              <div class="wf-step-icon">💰</div>
+              <div class="wf-step-title">دریافت و پرداخت</div>
+              <div class="wf-step-sub">نقد، حواله و چک صیادی</div>
+              <div class="wf-step-link">ورود به خزانه‌داری ⬅</div>
+            </div>
+            <div class="wf-step-connector">
+              <span class="wf-conn-line"></span>
+              <span class="wf-conn-arrow">◀</span>
+            </div>
+            <div class="workflow-step-node" data-flow-target="drilldown">
+              <div class="wf-step-num">۵</div>
+              <div class="wf-step-icon">🔍</div>
+              <div class="wf-step-title">مرور جامع حساب‌ها</div>
+              <div class="wf-step-sub">۴ سطح کل، معین و ریزگردش</div>
+              <div class="wf-step-link">مرور دفاتر مالی ⬅</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2>آخرین اسناد حسابداری</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>شماره</th><th>تاریخ</th><th>شرح</th><th>وضعیت</th><th class="num">مبلغ</th></tr>
+                </thead>
+                <tbody id="recentEntries"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h2>مشتریان (تفصیلی شناور)</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>کد</th><th>عنوان</th><th>تلفن</th></tr></thead>
+                <tbody id="dashCustomers"></tbody>
+              </table>
+            </div>
+            <div class="hr"></div>
+            <div class="totals" id="dashTotals"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 2. General Ledger ============ -->
+      <section class="view" id="view-ledger">
+        <div class="grid two">
+          <div class="card">
+            <h2>ثبت سند حسابداری (دوبل)</h2>
+            <div class="form-grid">
+              <div class="field"><label>تاریخ (میلادی)</label><input type="date" id="jeDate"></div>
+              <div class="field" style="grid-column: span 2;"><label>شرح سند</label><input id="jeDesc" placeholder="شرح معامله"></div>
+              <div class="field"><label>وضعیت</label>
+                <select id="jeStatus">
+                  <option value="approved">تایید شده</option>
+                  <option value="draft">پیش‌نویس</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap" style="margin-top:12px;">
+              <table id="jeRows" class="arbin-grid">
+                <thead>
+                  <tr>
+                    <th style="width:34px;">#</th>
+                    <th style="width:85px;">کد معین</th>
+                    <th style="width:190px;">نام حساب معین</th>
+                    <th style="width:170px;">تفصیلی شناور</th>
+                    <th>شرح آرتیکل</th>
+                    <th class="num" style="width:125px;">بدهکار (تومان)</th>
+                    <th class="num" style="width:125px;">بستانکار (تومان)</th>
+                    <th style="width:34px;"></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="arbin-balance-bar">
+              <div class="actions">
+                <button class="btn ghost sm" id="jeAddRow">+ سطر جدید (Enter)</button>
+                <button class="btn sm" id="jeSave">💾 ثبت و تایید سند (F4)</button>
+              </div>
+              <div class="balance-item">
+                <span>جمع بدهکار:</span>
+                <strong id="jeTotalDr" class="num">۰</strong>
+                <span>تومان</span>
+              </div>
+              <div class="balance-item">
+                <span>جمع بستانکار:</span>
+                <strong id="jeTotalCr" class="num">۰</strong>
+                <span>تومان</span>
+              </div>
+              <div class="balance-item">
+                <span class="badge ok" id="jeBalance">تراز: ۰</span>
+              </div>
+            </div>
+            <div class="grid-keyboard-hints">
+              <span class="hint-item"><kbd>Enter</kbd> یا <kbd>Tab</kbd> سلول بعد</span>
+              <span class="hint-item"><kbd>F3</kbd> جستجوی سریع حساب/تفصیلی</span>
+              <span class="hint-item"><kbd>=</kbd> یا <kbd>F9</kbd> تراز خودکار سطر</span>
+              <span class="hint-item"><kbd>↑</kbd> <kbd>↓</kbd> پیمایش عمودی بین سطرها</span>
+              <span class="hint-item"><kbd>Ctrl+Del</kbd> حذف سطر جاری</span>
+              <span class="hint-item"><kbd>F4</kbd> ثبت سند</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>کدینگ حسابداری (گروه / کل / معین)</h2>
+            <div class="tree" id="accountTree" style="max-height:520px; overflow:auto;"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>اسناد دوره
+            <span class="actions">
+              <label class="muted" style="font-size:12px;"><input type="checkbox" id="jeDrafts" style="width:auto;"> نمایش پیش‌نویس‌ها</label>
+            </span>
+          </h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>شماره</th><th>تاریخ</th><th>شمسی</th><th>شرح</th><th>منبع</th><th>وضعیت</th><th class="num">مبلغ</th><th>عملیات</th></tr></thead>
+              <tbody id="entriesBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2>تراز آزمایشی ۴ ستونی
+              <select id="tbLevel" style="width:auto;">
+                <option value="subsidiary">معین</option>
+                <option value="general">کل</option>
+                <option value="group">گروه</option>
+              </select>
+            </h2>
+            <div class="table-wrap" style="max-height:420px; overflow:auto;">
+              <table>
+                <thead><tr><th>کد</th><th>عنوان</th><th class="num">گردش بدهکار</th><th class="num">گردش بستانکار</th><th class="num">مانده بدهکار</th><th class="num">مانده بستانکار</th></tr></thead>
+                <tbody id="tbBody"></tbody>
+                <tfoot id="tbFoot"></tfoot>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>صورت سود و زیان</h2>
+            <div class="table-wrap"><table>
+              <thead><tr><th>شرح</th><th class="num">مبلغ</th></tr></thead>
+              <tbody id="isBody"></tbody>
+              <tfoot id="isFoot"></tfoot>
+            </table></div>
+            <div class="hr"></div>
+            <h3>ترازنامه</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>شرح</th><th class="num">مبلغ</th></tr></thead>
+              <tbody id="bsBody"></tbody>
+              <tfoot id="bsFoot"></tfoot>
+            </table></div>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2>صورت حساب (دفتر معین)</h2>
+            <div class="form-grid">
+              <div class="field"><label>کد حساب</label><input id="asCode" placeholder="1210" value="1210"></div>
+              <div class="field" style="align-self:end;"><button class="btn sm" id="asRun">استعلام</button></div>
+            </div>
+            <div class="table-wrap" style="max-height:360px; overflow:auto; margin-top:10px;">
+              <table>
+                <thead><tr><th>سند</th><th>تاریخ</th><th>شرح</th><th class="num">بدهکار</th><th class="num">بستانکار</th><th class="num">مانده</th></tr></thead>
+                <tbody id="asBody"></tbody>
+                <tfoot id="asFoot"></tfoot>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>بستن سال مالی (اختتامیه / افتتاحیه)</h2>
+            <p class="muted" style="font-size:12px;">
+              با بستن سال مالی، حساب‌های درآمد و هزینه صفر شده و سود به سود انباشته منتقل می‌شود و دیگر ثبت سند در آن سال ممکن نیست.
+            </p>
+            <div class="actions">
+              <button class="btn" id="btnCloseFY">اجرای سند اختتامیه</button>
+              <button class="btn info" id="btnOpenFY">ثبت سند افتتاحیه سال بعد</button>
+            </div>
+            <div id="fyResult" class="empty">هنوز عملیاتی انجام نشده است.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 2. Account Drill-Down (مرور جامع حساب‌ها) ============ -->
+      <section class="view" id="view-drilldown">
+        <div class="card">
+          <h2>
+            <span>🔍 مرور جامع حساب‌ها (۴ سطح استاندارد حسابداری)</span>
+            <span class="actions">
+              <button class="btn ghost sm" id="ddResetBtn">بازگشت به سطح گروه</button>
+            </span>
+          </h2>
+
+          <div class="drilldown-breadcrumb" id="ddBreadcrumb">
+            <span class="drilldown-step active" data-level="group">۱. گروه حساب‌ها</span>
+            <span class="drilldown-sep">❯</span>
+            <span class="drilldown-step" data-level="general">۲. حساب‌های کل</span>
+            <span class="drilldown-sep">❯</span>
+            <span class="drilldown-step" data-level="subsidiary">۳. حساب‌های معین</span>
+            <span class="drilldown-sep">❯</span>
+            <span class="drilldown-step" data-level="detail">۴. تفصیلی شناور</span>
+            <span class="drilldown-sep">❯</span>
+            <span class="drilldown-step" data-level="statement">۵. گردش ریز اسناد</span>
+          </div>
+
+          <div class="grid three" style="margin-bottom:14px;">
+            <div class="kpi">
+              <div class="label">مجموع گردش بدهکار</div>
+              <div class="value" id="ddTotalDr">۰ <span class="unit">تومان</span></div>
+            </div>
+            <div class="kpi alt">
+              <div class="label">مجموع گردش بستانکار</div>
+              <div class="value" id="ddTotalCr">۰ <span class="unit">تومان</span></div>
+            </div>
+            <div class="kpi blue">
+              <div class="label">مانده نهایی</div>
+              <div class="value" id="ddBalance">۰ <span class="unit">تومان</span></div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="drilldown-table" id="ddTable">
+              <thead id="ddThead">
+                <tr>
+                  <th>کد حساب</th>
+                  <th>عنوان حساب</th>
+                  <th>سطح حساب</th>
+                  <th class="num">گردش بدهکار</th>
+                  <th class="num">گردش بستانکار</th>
+                  <th class="num">مانده بدهکار</th>
+                  <th class="num">مانده بستانکار</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody id="ddBody"></tbody>
+              <tfoot id="ddFoot"></tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Document Flow (سیستم ارتباط و پیگیری اسناد) ============ -->
+      <section class="view" id="view-docflow">
+        <div class="card docflow-card">
+          <!-- Top Header & Selector Bar -->
+          <div class="docflow-header-bar">
+            <div class="docflow-title-group">
+              <div class="docflow-title-row">
+                <span class="docflow-main-title">🔗 ارتباط و پیگیری زنجیره اسناد</span>
+                <span class="badge ok" id="dfStatusBadge">تکمیل شده</span>
+              </div>
+              <div class="docflow-subtitle" id="dfSubtitle">رهگیری گام‌به‌گام پیوند فاکتور، حواله انبار، سند دوبل و تسویه مالی</div>
+            </div>
+            <div class="docflow-controls">
+              <div class="docflow-select-wrap">
+                <label for="dfRecentSelect">انتخاب فرآیند یا سند:</label>
+                <select id="dfRecentSelect" class="docflow-select">
+                  <option value="">در حال بارگذاری لیست اسناد...</option>
+                </select>
+              </div>
+              <button class="btn sm ghost" id="dfRefreshBtn" title="بازخوانی زنجیره">🔄 بازخوانی</button>
+            </div>
+          </div>
+
+          <!-- Document KPI Summary Bar -->
+          <div class="docflow-summary-bar" id="dfSummaryBar">
+            <div class="df-summary-item">
+              <span class="lbl">سند مبدا / ریشه:</span>
+              <strong id="dfRootTitle">—</strong>
+            </div>
+            <div class="df-summary-item">
+              <span class="lbl">طرف حساب:</span>
+              <strong id="dfPartyName">—</strong>
+            </div>
+            <div class="df-summary-item">
+              <span class="lbl">مبلغ کل فرآیند:</span>
+              <strong class="df-highlight-val" id="dfAmount">—</strong>
+            </div>
+            <div class="df-summary-item">
+              <span class="lbl">تاریخ شروع:</span>
+              <strong id="dfStartDate">—</strong>
+            </div>
+            <div class="df-summary-item">
+              <span class="lbl">تعداد اسناد متصل:</span>
+              <strong class="badge info" id="dfNodeCount">۰ سند</strong>
+            </div>
+          </div>
+
+          <!-- 5-Stage Iranian ERP Business Flow Stepper -->
+          <div class="docflow-stepper-section">
+            <div class="docflow-section-label">
+              <span>🚀 مراحل چرخه مالی (Business Lifecycle)</span>
+              <span class="docflow-hint">وضعیت گام‌به‌گام از ثبت اولیه تا تایید، حواله، سند دوبل و تسویه</span>
+            </div>
+            <div class="docflow-stepper" id="dfStepper">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Connected Documents Chain (Graph / Cards) -->
+          <div class="docflow-graph-section">
+            <div class="docflow-section-label">
+              <span>🗺️ نقشه پیوند اسناد مرتبط (Document Flowchart)</span>
+              <span class="docflow-hint">با کلیک روی دکمه هر کارت، مستقیماً به پنجره همان سند منتقل می‌شوید</span>
+            </div>
+            <div class="docflow-chain-flow" id="dfCardsContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Audit Trail & Operations History -->
+          <div class="docflow-audit-section">
+            <div class="docflow-section-label">
+              <span>⏱️ ردپای عملیات و سوابق تغییرات (Audit Trail & History)</span>
+              <span class="docflow-hint">سوابق تاریخی ثبت، تایید، تغییرات و مسئولان اجرای هر مرحله</span>
+            </div>
+            <div class="table-wrap">
+              <table class="docflow-audit-table">
+                <thead>
+                  <tr>
+                    <th style="width: 170px;">زمان و تاریخ</th>
+                    <th style="width: 140px;">کاربر / عامل</th>
+                    <th style="width: 130px;">نوع اقدام</th>
+                    <th style="width: 160px;">موجودیت</th>
+                    <th>شرح و جزئیات عملیات</th>
+                  </tr>
+                </thead>
+                <tbody id="dfAuditTableBody">
+                  <tr><td colspan="5" class="empty">در حال واکشی ردپای عملیات...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 3. Treasury ============ -->
+      <section class="view" id="view-treasury">
+        <div class="grid two">
+          <div class="card">
+            <h2>دریافت چک صیادی از مشتری</h2>
+            <div class="form-grid">
+              <div class="field"><label>مشتری</label><select id="chCustomer"></select></div>
+              <div class="field"><label>شماره صیادی</label><input id="chSayyad" value="7123456789012345"></div>
+              <div class="field"><label>شماره چک</label><input id="chNumber" value="CHK-1001"></div>
+              <div class="field"><label>بانک</label><input id="chBank" value="بانک ملت"></div>
+              <div class="field"><label>تاریخ سررسید</label><input type="date" id="chDue"></div>
+              <div class="field"><label>مبلغ</label><input type="number" id="chAmount" value="50000000"></div>
+              <div class="field"><label>تاریخ دریافت</label><input type="date" id="chRecv"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;"><button class="btn" id="btnReceiveCheque">ثبت دریافت چک</button></div>
+          </div>
+
+          <div class="card">
+            <h2>صدور چک صادره (پرداختی)</h2>
+            <div class="form-grid">
+              <div class="field"><label>ذینفع</label><select id="isPayee"></select></div>
+              <div class="field"><label>حساب بانکی</label><select id="isBankAcc"></select></div>
+              <div class="field"><label>شماره صیادی</label><input id="isSayyad" value="7123456789012400"></div>
+              <div class="field"><label>شماره چک</label><input id="isNumber" value="CHK-9001"></div>
+              <div class="field"><label>بانک</label><input id="isBank" value="بانک ملت"></div>
+              <div class="field"><label>تاریخ سررسید</label><input type="date" id="isDue"></div>
+              <div class="field"><label>مبلغ</label><input type="number" id="isAmount" value="20000000"></div>
+              <div class="field"><label>تاریخ صدور</label><input type="date" id="isDate"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;"><button class="btn info" id="btnIssueCheque">ثبت چک صادره</button></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>چک‌ها (چرخه چهار مرحله‌ای)
+            <select id="chequeFilter" style="width:auto;">
+              <option value="">همه</option>
+              <option value="received">دریافتی</option>
+              <option value="issued">صادره</option>
+            </select>
+          </h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>شماره</th><th>صیادی</th><th>طرف حساب</th><th>نوع</th><th>وضعیت</th><th>سررسید</th><th class="num">مبلغ</th><th>عملیات</th></tr></thead>
+              <tbody id="chequesBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <h2>سند رسید / پرداخت خزانه</h2>
+          <div class="form-grid">
+            <div class="field"><label>نوع سند</label>
+              <select id="txType">
+                <option value="receipt">رسید (دریافت)</option>
+                <option value="payment">پرداخت</option>
+              </select>
+            </div>
+            <div class="field"><label>روش پرداخت</label>
+              <select id="txMethod">
+                <option value="cash">نقدی (صندوق)</option>
+                <option value="bank_transfer">انتقال بانکی</option>
+                <option value="pos">کارتخوان (POS)</option>
+                <option value="sayyad_cheque">چک صیادی</option>
+              </select>
+            </div>
+            <div class="field"><label>طرف حساب</label><select id="txParty"></select></div>
+            <div class="field"><label>حساب بانکی</label><select id="txBank"></select></div>
+            <div class="field"><label>مبلغ</label><input type="number" id="txAmount" value="10000000"></div>
+            <div class="field"><label>تاریخ</label><input type="date" id="txDate"></div>
+            <div class="field" style="grid-column: span 2;"><label>شرح</label><input id="txDesc" placeholder="شرح رسید/پرداخت"></div>
+          </div>
+          <div class="actions" style="margin-top:12px;"><button class="btn" id="btnTxSave">ثبت سند خزانه</button></div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2>تراکنش‌های خزانه</h2>
+            <div class="table-wrap" style="max-height:340px; overflow:auto;">
+              <table>
+                <thead><tr><th>تاریخ</th><th>نوع</th><th>روش</th><th class="num">مبلغ</th><th>شرح</th></tr></thead>
+                <tbody id="txBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h2>راس‌گیری چک‌های بازار</h2>
+            <div class="table-wrap">
+              <table id="rasTable">
+                <thead><tr><th class="num">مبلغ</th><th>سررسید</th></tr></thead>
+                <tbody>
+                  <tr><td><input type="number" class="rasAmt" value="10000000"></td><td><input type="date" class="rasDate" value="2026-05-01"></td></tr>
+                  <tr><td><input type="number" class="rasAmt" value="30000000"></td><td><input type="date" class="rasDate" value="2026-06-30"></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-grid" style="margin-top:10px;">
+              <div class="field"><label>مبنای تاریخ فاکتور</label><input type="date" id="rasBase" value="2026-04-01"></div>
+              <div class="field" style="align-self:end;"><button class="btn warn" id="btnRas">محاسبه راس</button></div>
+            </div>
+            <div id="rasResult" class="empty">برای محاسبه، دکمه «محاسبه راس» را بزنید.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. Inventory ============ -->
+      <section class="view" id="view-inventory">
+        <div class="grid kpis" id="invKpis"></div>
+
+        <div class="grid two">
+          <div class="card">
+            <h2>رسید انبار (خرید)</h2>
+            <div class="form-grid">
+              <div class="field"><label>کالا</label><select id="rcProduct"></select></div>
+              <div class="field"><label>انبار</label><select id="rcWarehouse"></select></div>
+              <div class="field"><label>تأمین‌کننده</label><select id="rcSupplier"></select></div>
+              <div class="field"><label>تعداد</label><input type="number" id="rcQty" value="10"></div>
+              <div class="field"><label>بهای واحد</label><input type="number" id="rcCost" value="50000000"></div>
+              <div class="field"><label>تاریخ</label><input type="date" id="rcDate"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;"><button class="btn" id="btnReceipt">ثبت رسید انبار</button></div>
+          </div>
+
+          <div class="card">
+            <h2>حواله خروج (فروش)</h2>
+            <div class="form-grid">
+              <div class="field"><label>کالا</label><select id="dlProduct"></select></div>
+              <div class="field"><label>انبار</label><select id="dlWarehouse"></select></div>
+              <div class="field"><label>تعداد</label><input type="number" id="dlQty" value="5"></div>
+              <div class="field"><label>تاریخ</label><input type="date" id="dlDate"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;"><button class="btn warn" id="btnDelivery">ثبت حواله خروج</button></div>
+            <div class="hr"></div>
+            <div class="actions">
+              <button class="btn ghost sm" id="btnSalesReturn">برگشت فروش (۱ واحد)</button>
+              <button class="btn ghost sm" id="btnRecon">مغایرت شمارش</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>فهرست کالاها و موجودی</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>کد</th><th>عنوان</th><th>دسته</th><th class="num">موجودی</th><th class="num">میانگین</th><th class="num">ارزش</th><th class="num">حد هشدار</th></tr></thead>
+              <tbody id="productsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>کاردکس کالا
+            <span class="actions">
+              <select id="kardexProduct" style="width:auto;"></select>
+              <button class="btn sm ghost" id="btnKardex">نمایش کاردکس</button>
+            </span>
+          </h2>
+          <div class="table-wrap" style="max-height:360px; overflow:auto;">
+            <table>
+              <thead><tr><th>شماره</th><th>تاریخ</th><th>نوع</th><th class="num">تعداد</th><th class="num">نرخ</th><th class="num">مبلغ</th><th class="num">مانده تعدادی</th><th class="num">میانگین</th></tr></thead>
+              <tbody id="kardexBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. Sales / Invoicing ============ -->
+      <section class="view" id="view-sales">
+        <div class="grid two">
+          <div class="card">
+            <h2>ساخت فاکتور فروش</h2>
+            <div class="form-grid">
+              <div class="field"><label>مشتری</label><select id="invCustomer"></select></div>
+              <div class="field"><label>تاریخ</label><input type="date" id="invDate"></div>
+              <div class="field"><label>نوع فاکتور</label>
+                <select id="invType">
+                  <option value="official_sale">فاکتور فروش</option>
+                  <option value="proforma">پیش‌فاکتور</option>
+                </select>
+              </div>
+              <div class="field"><label>وضعیت پرداخت</label>
+                <select id="invPay">
+                  <option value="unpaid">نسیه</option>
+                  <option value="cash">نقدی</option>
+                  <option value="cheque">چکی</option>
+                </select>
+              </div>
+              <div class="field"><label>کالا (لیست انبار)</label><select id="invProduct"></select></div>
+            </div>
+
+            <div class="table-wrap" style="margin-top:12px;">
+              <table id="invRows">
+                <thead><tr><th>شرح کالا/خدمت</th><th class="num">تعداد</th><th class="num">قیمت واحد</th><th class="num">تخفیف</th><th class="num">مالیات ۱۰٪</th><th class="num">جمع</th><th></th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="actions" style="margin-top:10px;">
+              <button class="btn ghost sm" id="invAddRow">+ افزودن ردیف</button>
+              <button class="btn ghost sm" id="invAddProduct">+ از کالاهای انبار</button>
+            </div>
+            <div class="hr"></div>
+            <div class="totals" id="invTotals"></div>
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn" id="btnCreateInvoice">ثبت فاکتور</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>پیش‌نمایش و چاپ فاکتور</h2>
+            <div id="invoicePreview" class="empty">فاکتوری برای نمایش انتخاب نشده است.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>فهرست فاکتورها</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>شماره</th><th>تاریخ</th><th>شمسی</th><th>مشتری</th><th>نوع</th><th>پرداخت</th><th class="num">مبلغ نهایی</th><th>شناسه مالیاتی</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+              <tbody id="invoicesBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6. Payroll ============ -->
+      <section class="view" id="view-payroll">
+        <div class="grid two">
+          <div class="card">
+            <h2>ثبت پرسنل جدید</h2>
+            <div class="form-grid">
+              <div class="field"><label>نام و نام خانوادگی</label><input id="empName" placeholder="نام پرسنل"></div>
+              <div class="field"><label>کد ملی</label><input id="empNational" placeholder="۱۰ رقمی"></div>
+              <div class="field"><label>سمت</label><input id="empJob" value="کارشناس"></div>
+              <div class="field"><label>حقوق پایه</label><input type="number" id="empBase" value="80000000"></div>
+              <div class="field"><label>حق مسکن</label><input type="number" id="empHousing" value="9000000"></div>
+              <div class="field"><label>بن خواربار</label><input type="number" id="empGrocery" value="14000000"></div>
+              <div class="field"><label>تعداد فرزند</label><input type="number" id="empChildren" value="0"></div>
+              <div class="field"><label>شبا</label><input id="empShaba" placeholder="IR..."></div>
+            </div>
+            <div class="actions" style="margin-top:12px;"><button class="btn" id="btnAddEmp">ثبت پرسنل</button></div>
+          </div>
+
+          <div class="card">
+            <h2>اجرای لیست حقوق ماهانه</h2>
+            <div class="form-grid">
+              <div class="field"><label>عنوان ماه</label><input id="prMonth" value="فروردین ۱۴۰۵"></div>
+              <div class="field"><label>تاریخ اجرا</label><input type="date" id="prDate"></div>
+            </div>
+            <div class="table-wrap" style="margin-top:10px;">
+              <table>
+                <thead><tr><th>انتخاب</th><th>پرسنل</th><th class="num">روز کار</th><th class="num">اضافه کار</th></tr></thead>
+                <tbody id="prEmployees"></tbody>
+              </table>
+            </div>
+            <div class="actions" style="margin-top:12px;"><button class="btn" id="btnRunPayroll">محاسبه و صدور سند</button></div>
+            <div id="payrollResult" class="empty">هنوز لیستی اجرا نشده است.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>فهرست پرسنل</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>کد تفصیلی</th><th>نام</th><th>سمت</th><th class="num">حقوق پایه</th><th class="num">مسکن</th><th class="num">بن</th><th>شبا</th></tr></thead>
+              <tbody id="employeesBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>فیش‌های حقوقی آخرین اجرا</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>پرسنل</th><th class="num">ناخالص</th><th class="num">بیمه ۷٪</th><th class="num">بیمه ۲۳٪ کارفرما</th><th class="num">مالیات ماده ۸۴</th><th class="num">قابل پرداخت</th><th>عملیات</th></tr></thead>
+              <tbody id="payslipsBody"></tbody>
+            </table>
+          </div>
+          <div class="hr"></div>
+          <div class="totals" id="payrollTotals"></div>
+        </div>
+
+        <div class="card">
+          <h2>جدول نرخ مالیات پلکانی ماده ۸۴ (سالانه)</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th class="num">از (تومان)</th><th class="num">تا (تومان)</th><th class="num">نرخ</th></tr></thead>
+              <tbody id="taxBracketsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. Fixed Assets & Depreciation ============ -->
+      <section class="view" id="view-fixedAssets">
+        <div class="grid two">
+          <div class="card">
+            <h2>ثبت پلاک و دارایی جدید (ماده ۱۴۹ ق.م.م)</h2>
+            <div class="form-grid">
+              <div class="field"><label>پلاک / کد اموال</label><input id="faCode" placeholder="FA-1405-001"></div>
+              <div class="field"><label>عنوان دارایی</label><input id="faTitle" placeholder="مثال: سرور محاسباتی دل"></div>
+              <div class="field"><label>دسته دارایی</label>
+                <select id="faCategory">
+                  <option value="اثاثه و منصوبات">اثاثه و منصوبات</option>
+                  <option value="وسایط نقلیه">وسایط نقلیه</option>
+                  <option value="تجهیزات رایانه‌ای">تجهیزات رایانه‌ای</option>
+                  <option value="ماشین‌آلات">ماشین‌آلات و ابزار</option>
+                  <option value="ساختمان">ساختمان و ابنیه</option>
+                </select>
+              </div>
+              <div class="field"><label>روش استهلاک</label>
+                <select id="faMethod">
+                  <option value="straight_line">خط مستقیم (Straight Line)</option>
+                  <option value="declining_balance">مانده نزولی (Declining Balance)</option>
+                </select>
+              </div>
+              <div class="field"><label>تاریخ خرید</label><input type="date" id="faBuyDate"></div>
+              <div class="field"><label>بهای تمام‌شده خرید (تومان)</label><input type="number" id="faCost" placeholder="0"></div>
+              <div class="field"><label>عمر مفید (سال) / ضریب نرخ</label><input type="number" id="faLife" value="5" placeholder="عمر مفید سال"></div>
+              <div class="field"><label>محل استقرار / تحویل‌گیرنده</label><input id="faLoc" placeholder="دفتر مرکزی / مدیریت"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn sm" id="faSave">ثبت دارایی در سیستم</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>محاسبه و صدور سند استهلاک دوره</h2>
+            <p class="muted" style="font-size:13px;">محاسبه خودکار استهلاک کلیه دارایی‌های فعال مطابق با جدول ضرایب ماده ۱۴۹ قانون مالیات‌های مستقیم و صدور سند دوبل (بدهکار ۷۲۵۰ / بستانکار ۲۱۱۰).</p>
+            <div class="form-grid" style="margin-top:12px;">
+              <div class="field"><label>تاریخ پایان دوره استهلاک</label><input type="date" id="faDeprDate"></div>
+              <div class="field"><label>طول دوره محاسبه</label>
+                <select id="faDeprMonths">
+                  <option value="12">سالانه (۱۲ ماه کامل)</option>
+                  <option value="6">شش ماهه (۶ ماه)</option>
+                  <option value="1">یک ماهه (۱ ماه)</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions" style="margin-top:16px;">
+              <button class="btn sm" id="faRunDepr">⚡ اجرای چرخه استهلاک و صدور سند</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>فهرست اموال و دارایی‌های ثابت شرکت</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>پلاک اموال</th><th>عنوان</th><th>دسته</th><th>روش</th><th class="num">بهای اولیه</th><th class="num">استهلاک انباشته</th><th class="num">ارزش دفتری</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+              <tbody id="faTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 8. Manufacturing & BOM ============ -->
+      <section class="view" id="view-manufacturing">
+        <div class="grid two">
+          <div class="card">
+            <h2>تعریف فرمول ساخت (BOM استاندارد)</h2>
+            <div class="form-grid">
+              <div class="field"><label>کالای نهایی هدف</label><select id="bomProduct"></select></div>
+              <div class="field"><label>عنوان فرمول ساخت</label><input id="bomTitle" placeholder="مثال: استاندارد تولید محصول A"></div>
+              <div class="field"><label>دستمزد مستقیم هر واحد (تومان)</label><input type="number" id="bomLabor" value="0"></div>
+              <div class="field"><label>سربار جذب‌شده هر واحد (تومان)</label><input type="number" id="bomOvh" value="0"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn sm" id="bomSave">ثبت فرمول ساخت (BOM)</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>صدور دستور و سفارش تولید (Production Order)</h2>
+            <div class="form-grid">
+              <div class="field"><label>فرمول ساخت (BOM)</label><select id="orderBomSelect"></select></div>
+              <div class="field"><label>شماره سفارش کار</label><input id="orderNo" placeholder="WO-1405-001"></div>
+              <div class="field"><label>تیراژ تولید برنامه‌ریزی‌شده</label><input type="number" id="orderQty" value="10"></div>
+              <div class="field"><label>تاریخ شروع تولید</label><input type="date" id="orderStartDate"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn sm" id="orderCreate">صدور سفارش تولید</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>کارتابل سفارشات تولید و کنترل خط ساخت</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>شماره سفارش</th><th>محصول</th><th class="num">تیراژ</th><th>تاریخ شروع</th><th class="num">هزینه مواد (WIP)</th><th class="num">بهای نهایی واحد</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+              <tbody id="mfgOrdersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 9. Contracting & Projects ============ -->
+      <section class="view" id="view-contracting">
+        <div class="grid two">
+          <div class="card">
+            <h2>ثبت قرارداد پیمانکاری جدید</h2>
+            <div class="form-grid">
+              <div class="field"><label>شماره پیمان / قرارداد</label><input id="cntNo" placeholder="CNT-1405-01"></div>
+              <div class="field"><label>موضوع قرارداد</label><input id="cntTitle" placeholder="پروژه اجرای ابنیه فاز ۱"></div>
+              <div class="field"><label>کارفرما (طرف‌حساب)</label><select id="cntEmployer"></select></div>
+              <div class="field"><label>مبلغ کل پیمان (تومان)</label><input type="number" id="cntAmount" placeholder="0"></div>
+              <div class="field"><label>درصد حسن انجام کار (معمولاً ۱۰٪)</label><input type="number" id="cntRetention" value="10"></div>
+              <div class="field"><label>درصد بیمه ماده ۳۸ (معمولاً ۵٪)</label><input type="number" id="cntSso" value="5"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn sm" id="cntSave">ثبت قرارداد پیمانکاری</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>ثبت صورت‌وضعیت کارکرد دوره</h2>
+            <div class="form-grid">
+              <div class="field"><label>انتخاب قرارداد</label><select id="billContractSelect"></select></div>
+              <div class="field"><label>شماره صورت‌وضعیت</label><input id="billNo" placeholder="PB-01"></div>
+              <div class="field"><label>تاریخ صورت‌وضعیت</label><input type="date" id="billDate"></div>
+              <div class="field"><label>کارکرد ناخالص تایید شده (تومان)</label><input type="number" id="billGross" placeholder="0"></div>
+            </div>
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn sm" id="billSubmit">ثبت و محاسبه کسورات ماده ۳۸ و حسن انجام کار</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>کارتابل صورت‌وضعیت‌ها و مطالبات از کارفرما</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>شماره</th><th>پیمان</th><th>تاریخ</th><th class="num">کارکرد ناخالص</th><th class="num">سپرده حسن انجام کار</th><th class="num">بیمه ماده ۳۸</th><th class="num">مالیات بر ارزش افزوده</th><th class="num">خالص قابل دریافت</th><th>وضعیت</th><th>سند</th></tr></thead>
+              <tbody id="billingsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 10. Modular Licensing ============ -->
+      <section class="view" id="view-modules">
+        <div class="card" style="background: linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(16,185,129,0.06) 100%); border: 1px solid var(--border);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h2 style="margin:0 0 4px 0;">مدیریت ماژول‌ها و اشتراک لایسنس</h2>
+              <p class="muted" style="margin:0; font-size:13px;">
+                آربین کاملاً ماژولار است؛ فقط برای بخش‌هایی که نیاز دارید هزینه کنید. ماژول‌های غیرفعال از سایدبار و منوها مخفی می‌شوند تا برنامه خلوت و سبک بماند.
+              </p>
+            </div>
+            <span class="chip" id="activeModulesCountChip" style="font-weight:bold; background:var(--primary); color:#fff;">-</span>
+          </div>
+
+          <div class="hr" style="margin:16px 0;"></div>
+
+          <div style="font-size:13px; font-weight:bold; margin-bottom:10px;">⚡ فعال‌سازی سریع پکیج‌های پیش‌فرض صنفی:</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;" id="presetButtonsWrap">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <h2 style="margin-bottom:12px;">کاتالوگ ماژول‌های نرم‌افزار</h2>
+          <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:16px;" id="modulesGrid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+  </div>
+</div>
+
+<div id="printArea" class="print-area"></div>
+
+<!-- Modal -->
+<div class="overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modalTitle">جزئیات</h3>
+      <button class="btn sm ghost" id="modalClose" aria-label="بستن">× بستن</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Desktop Fast Lookup Modal (Account & Subledger Search - F3) -->
+<div class="lookup-overlay" id="lookupOverlay" role="dialog" aria-modal="true" style="display:none;">
+  <div class="lookup-card">
+    <div class="lookup-head">
+      <div class="lookup-title-wrap">
+        <span class="lookup-icon">🔍</span>
+        <div>
+          <h3 id="lookupTitle">جستجوی سریع حساب معین (F3)</h3>
+          <div class="lookup-hint">با کلیدهای ↑ و ↓ سطر را مشخص و با Enter انتخاب کنید (Esc برای انصراف)</div>
+        </div>
+      </div>
+      <button class="btn sm ghost" id="lookupClose" aria-label="بستن">✕</button>
+    </div>
+    <div class="lookup-search-bar">
+      <input type="text" id="lookupInput" placeholder="کد یا عنوان را تایپ کنید…" autocomplete="off">
+      <span class="lookup-count" id="lookupCount">۰ مورد</span>
+    </div>
+    <div class="lookup-table-wrap">
+      <table class="arbin-grid lookup-grid">
+        <thead>
+          <tr>
+            <th style="width:105px;">کد</th>
+            <th>عنوان حساب / طرف‌حساب</th>
+            <th style="width:130px;">سطح / ماهیت</th>
+            <th style="width:75px;">عملیات</th>
+          </tr>
+        </thead>
+        <tbody id="lookupBody"></tbody>
+      </table>
+    </div>
+    <div class="lookup-foot">
+      <div class="lookup-foot-keys">
+        <span><kbd>Enter</kbd> انتخاب</span>
+        <span><kbd>↑</kbd> <kbd>↓</kbd> حرکت بین سطرها</span>
+        <span><kbd>Esc</kbd> بستن پنجره</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Global loading -->
+<div class="loader" id="loader"><div class="spinner" aria-label="در حال بارگذاری"></div></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
