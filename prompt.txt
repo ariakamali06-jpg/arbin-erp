@@ -1,0 +1,113 @@
+# MISSION BRIEF: Arbin Accounting System — Full Sepidar Parity & Modernization (Phase 1)
+
+## 🎯 Project Goal
+Develop and upgrade the cloud accounting web platform **"Arbin"** located in `/data/arbin_app` to achieve complete functional parity with Iran's enterprise market standard, **"Sepidar System (System Group / Hamkaran System)"**.
+The system must implement the 5 standard core accounting modules with double-entry bookkeeping, floating sub-ledgers (تفصیلی شناور), an automatic journal entry generation engine, a comprehensive responsive RTL web UI, and automated test coverage.
+
+---
+
+## 🏗️ 1. Architecture & Directory Structure
+The architecture follows a modular backend (FastAPI + SQLite/SQLAlchemy) and a modern frontend (Vanilla JS + Tailwind CSS):
+
+```text
+/data/arbin_app/
+├── api.py                  # Main FastAPI application and routing
+├── database.py             # SQLite connection and session management
+├── ledger.py               # Module 1: General Ledger (Chart of accounts, double-entry, closing entries)
+├── treasury.py             # Module 2: Treasury (Cash, bank accounts, POS terminals, Sayyad cheques)
+├── inventory.py            # Module 3: Inventory & Warehouse (Receipts, delivery slips, moving average, Kardex)
+├── invoicing.py            # Module 4: Sales & Invoicing (Official invoices, VAT, Tax Payer System / Samaneh Moadian)
+├── payroll.py              # Module 5: Labor Law Payroll (Social security insurance 7%/23%, Tax Art. 84)
+├── reports.py              # Financial statements: 4-column trial balance, P&L, balance sheet, Kardex
+├── seed_data.py            # Iranian standard chart of accounts & demo seed data
+├── static/
+│   ├── index.html          # Responsive single-page application (SPA) with 5-module sidebar navigation
+│   ├── app.js              # Client state, API interactions, modals, and tab routing
+│   └── styles.css          # Custom typography, RTL styling, and modern UI components
+└── tests/                  # Automated pytest suite for all 5 modules
+```
+
+---
+
+## 📊 2. Database Models & Schema Specifications
+
+### 1. Chart of Accounts & Floating Sub-Ledgers (تفصیلی شناور):
+- Standard Fixed Hierarchy:
+  - Account Group (گروه - 1 digit): Assets (1), Non-Current Assets (2), Liabilities (4), Equity (5), Revenues (6), Expenses (7).
+  - General Ledger (کل - 2 digits): e.g., Cash & Banks (10), Trade Receivables (12).
+  - Subsidiary Account (معین - 4 digits): e.g., Bank Accounts (1010), Petty Cash (1020), Customer Receivables (1210).
+- Floating Sub-Ledgers (`SubLedger`):
+  - Multi-dimensional sub-account assigned to journal entries: Customers, Vendors, Banks, Employees, Cost Centers (مراکز هزینه).
+
+### 2. General Ledger & Journal Entries:
+- `JournalEntry`: ID, Entry Number (Manual/Auto), Reference Number (عطف), Document Date (Jalali/Gregorian), Description, Status (`draft`, `approved`, `permanent`, `opening_entry`, `closing_entry`).
+- `JournalItem`: Entry ID, Subsidiary Account ID (`moein_code`), Sub-ledger ID (`sub_ledger_id`), Line Description, Debit Amount, Credit Amount.
+- **Rule of Balance:** Total Debits MUST equal Total Credits. Permanent entries are immutable and cannot be deleted.
+
+### 3. Treasury & Sayyad Cheque Lifecycle (خزانه‌داری و چک صیادی):
+- `TreasuryTransaction`: Transaction ID, Type (`receipt`, `payment`), Method (`cash`, `bank_transfer`, `pos`, `sayyad_cheque`), Amount, Date, Party.
+- `Cheque`: 16-digit Sayyad ID, Serial Number, Issuing Bank, Due Date, Amount, Payee, Status:
+  - Received Cheques: `in_safe` (نزد صندوق) ⬅️ `deposited_to_bank` (در جریان وصول) ⬅️ `cleared` (وصول شده) OR `bounced` (واخواست / برگشتی) OR `transferred` (خرج شده) OR `returned` (مسترد شده).
+  - Issued Cheques: `issued` (صادره) ⬅️ `cleared` (پاس شده) OR `cancelled` (ابطال شده).
+
+### 4. Warehousing & Inventory Costing (تأمین‌کنندگان و انبار):
+- `Warehouse`: ID, Code, Name, Location, Custodian.
+- `Product`: ID, Product Code, Title, Primary Unit of Measure (UOM), Category, Safety Stock.
+- `StockMovement`: Movement Type (`purchase_receipt`, `sales_delivery`, `purchase_return`, `sales_return`, `stock_reconciliation`), Warehouse, Product, Quantity, Unit Price, Cost, Date.
+- **Costing Method:** Moving Average Costing (میانگین موزون متحرک) to maintain real-time Kardex ledger.
+
+### 5. Sales, Invoicing & Tax (مشتریان، فروش و سامانه مؤدیان):
+- `Invoice`: ID, Invoice Number, Type (`proforma`, `official_sale`, `sales_return`), Customer Sub-ledger, Date, Subtotal, Discount, VAT (10%), Grand Total, Payment Status (`unpaid`, `cash`, `cheque`, `split`).
+- Generation of the 22-character unique fiscal Tax ID (شناسه یکتای صورتحساب مالیاتی) compliant with Iranian Tax Administration (سامانه مؤدیان) based on Fiscal Memory ID, Julian Date, and Verhoeff/Base36 algorithm.
+
+### 6. Labor Law Payroll (حقوق و دستمزد):
+- `Employee`: Full details, Social Security Number, Base Wage, Housing Allowance (حق مسکن), Grocery Allowance (بن کارگری), Family Allowance (حق اولاد), Working Days, Overtime.
+- Mandatory Deductions: Employee Social Security (7%), Employer Social Security (23%), Progressive Income Tax brackets per Article 84 of the Direct Taxes Act.
+
+---
+
+## ⚙️ 3. Automatic Journal Entry Engine (سندزن خودکار)
+Every operational business transaction must automatically issue balanced double-entry accounting records:
+1. **Official Sales Invoice:**
+   - Debit: Trade Receivables (`1210` + Customer Sub-ledger)
+   - Credit: Sales Revenue (`6010`)
+   - Credit: Value Added Tax Payable (`4030`)
+2. **Cheque Received from Customer:**
+   - Debit: Notes Receivable - In Safe (`1030`)
+   - Credit: Trade Receivables (`1210` + Customer Sub-ledger)
+3. **Cheque Deposited to Bank:**
+   - Debit: Cheques in Collection (`1040` + Bank Sub-ledger)
+   - Credit: Notes Receivable - In Safe (`1030`)
+4. **Cheque Cleared / Settled:**
+   - Debit: Cash & Bank Accounts (`1010` + Bank Sub-ledger)
+   - Credit: Cheques in Collection (`1040` + Bank Sub-ledger)
+5. **Inventory Delivery upon Sale:**
+   - Debit: Cost of Goods Sold - COGS (`7010`)
+   - Credit: Inventory (`1110` + Product/Warehouse Sub-ledger)
+6. **Year-End Closing (بستن سال مالی):**
+   - Close temporary Revenue and Expense accounts to "Income Summary" (خلاصه سود و زیان).
+   - Transfer net profit/loss to "Retained Earnings" (سود یا زیان انباشته).
+   - Issue the Current Year Closing Entry (سند اختتامیه) and reverse it as the Next Year Opening Entry (سند افتتاحیه).
+
+---
+
+## 🖥️ 4. Frontend UI Requirements (static/index.html & static/app.js)
+1. **Modern RTL Navigation Sidebar reflecting Sepidar's 5 core systems:**
+   - 📊 **Executive Dashboard:** Quick KPI stat cards (Cash/Bank balances, total sales, receivables, net margin) and recent activity feed.
+   - 🧠 **General Ledger:** Chart of accounts tree viewer, double-entry journal voucher form, 4-column trial balance table, and year-end closing wizard.
+   - 💳 **Treasury:** Receipt/Payment voucher entry, interactive Sayyad cheque Kanban/table with lifecycle action buttons (`Deposit to Bank`, `Clear Cheque`, `Bounce Cheque`).
+   - 📦 **Inventory & Warehousing:** Product catalog, purchase goods receipt form, delivery slip form, and real-time interactive Kardex report.
+   - 🧾 **Customers & Sales:** Interactive invoice builder (product dropdown selector, auto unit price, real-time discount and 10% VAT calculation, 22-digit Tax ID generator, print preview).
+   - 👥 **Payroll:** Employee list, monthly payroll calculator, detailed pay-slip generation, and automated accounting entry dispatcher.
+2. Fast, responsive, clean styling with Persian number formatting, modal dialogs, loading states, and toast notifications.
+
+---
+
+## 🧪 5. Testing & Quality Assurance
+- Automated test coverage in `tests/`:
+  - `test_ledger.py`: Verifies voucher balance, trial balance calculations, and year-end closing logic.
+  - `test_treasury.py`: Verifies the 4-phase cheque clearing workflow and bank/safe balance updates.
+  - `test_inventory.py`: Validates moving average cost recalculation across receipts and issues.
+  - `test_invoicing.py`: Validates invoice totals, VAT computation, and 22-digit Tax ID validity.
+  - `test_payroll.py`: Validates Article 84 tax exempt brackets and 7%/23% social security calculations.
+- All tests must pass with 100% success rate (`pytest`) without regression.

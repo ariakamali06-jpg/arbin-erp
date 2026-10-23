@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: arbin-erp
+    runtime: docker
+    region: frankfurt  # نزدیک‌ترین منطقه به ایران
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHONUNBUFFERED
+        value: 1
+    healthCheckPath: /
+    autoDeploy: true
